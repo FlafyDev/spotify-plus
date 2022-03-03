@@ -1,0 +1,45 @@
+{
+  "name": "@spotify-plus/tools",
+  "private": true,
+  "version": "0.0.0",
+  "types": "src/index.ts",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "start:watch": "nodemon ./src/index.ts",
+    "build": "esbuild ./src/index.js --bundle --platform=node --outfile=dist/index.js --minify",
+    "build:watch": "yarn build --watch",
+    "dev": "run-p start:watch build:watch",
+    "typecheck": "tsc",
+    "lint": "eslint .",
+    "lint:fix": "yarn lint:fix",
+    "test": "jest --passWithNoTests",
+    "test:watch": "yarn test -- --watch"
+  },
+  "dependencies": {
+    "@types/esprima": "^4.0.3",
+    "@types/express": "^4.17.13",
+    "@types/lodash": "^4.14.179",
+    "@types/socket.io": "^3.0.2",
+    "@types/uuid": "^8.3.4",
+    "esprima": "^4.0.1",
+    "express": "^4.17.3",
+    "flow-parser": "^0.172.0",
+    "lodash": "^4.17.21",
+    "node-stream-zip": "^1.15.0",
+    "socket.io": "^4.4.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@spotify-plus/eslint-config": "*",
+    "@spotify-plus/jest-config": "*",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.6",
+    "eslint": "^8.1.0",
+    "jest": "^27.3.1",
+    "typescript": "^4.4.4"
+  },
+  "files": [
+    "./src/**/*"
+  ]
+}

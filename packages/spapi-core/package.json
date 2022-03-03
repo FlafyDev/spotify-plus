@@ -1,0 +1,25 @@
+{
+  "name": "@spotify-plus/spapi-core",
+  "private": true,
+  "version": "0.0.0",
+  "types": "src/index.ts",
+  "main": "src/index.ts",
+  "scripts": {
+    "build-local": "esbuild ./src/index.ts --bundle --platform=browser --outfile=dist/SPApiCore.js --format=esm",
+    "build": "esbuild ./src/index.ts --bundle --platform=browser --outfile=C:/Users/flafy/AppData/Roaming/Spotify/Apps/xpui/SPApiCore.js --format=esm",
+    "build:watch": "yarn build --watch",
+    "typecheck": "tsc",
+    "lint": "eslint .",
+    "lint:fix": "yarn lint:fix"
+  },
+  "dependencies": {
+    "socket.io-client": "^4.4.1"
+  },
+  "devDependencies": {
+    "@spotify-plus/eslint-config": "*",
+    "@types/node": "^16.11.6",
+    "esbuild-runner": "^2.2.1",
+    "eslint": "^8.1.0",
+    "typescript": "^4.4.4"
+  }
+}
