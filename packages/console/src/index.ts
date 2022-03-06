@@ -1,4 +1,4 @@
-import { CommunicationServer, Config } from '@spotify-plus/tools';
+import { CommunicationServer, Config, Injector } from '@spotify-plus/tools';
 
 const main = async () => {
   console.log("Verifying config folder...");
@@ -11,8 +11,8 @@ const main = async () => {
   }
 
   console.log(`Spotify+ v${config.version}`);
-  // const injector = new Injector(config, false);
-  // await injector.inject();
+  const injector = new Injector(config, false);
+  await injector.inject();
   console.log("Hi!");
 
   const server = new CommunicationServer(config, 'D:\\spotify-plus\\extensions', false);

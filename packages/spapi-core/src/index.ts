@@ -4,7 +4,10 @@ const main = async () => {
   while (!(
     (globalThis as any).SPApiTemp.React &&
     (globalThis as any).SPApiTemp.ReactDOM &&
-    (globalThis as any).SPApiTemp.platform)) {
+    (globalThis as any).SPApiTemp.platform &&
+    (globalThis as any).SPApiTemp.GenericModal &&
+    (globalThis as any).SPApiTemp.getShowFeedback
+  )) {
     await new Promise(resolve => setTimeout(resolve, 50));
   }
 
@@ -12,6 +15,7 @@ const main = async () => {
   const spapi = new SPApi(port, accessKey,
     (globalThis as any).SPApiTemp
   );
+  await spapi.makePlatform();
 
   (globalThis as any).SPApi = spapi;
 }

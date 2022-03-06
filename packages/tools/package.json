@@ -24,7 +24,6 @@
     "@types/uuid": "^8.3.4",
     "esprima": "^4.0.1",
     "express": "^4.17.3",
-    "flow-parser": "^0.172.0",
     "lodash": "^4.17.21",
     "node-stream-zip": "^1.15.0",
     "socket.io": "^4.4.1",

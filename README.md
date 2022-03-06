@@ -35,4 +35,4 @@ List of available settings:
 Planned.
 
 ## Themes
-Planned.
+No Support.
