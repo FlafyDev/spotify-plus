@@ -6,6 +6,7 @@
   "editor.formatOnSave": true,
   "cSpell.words": [
     "spapi",
+    "vxpui",
     "xpui"
   ],
   "[typescript]": {

@@ -1,5 +1,5 @@
 (async () => {
-  globalThis.SPApiTemp = {};
+  globalThis.SPApiTemp = { NamedComponents: {} };
 
   const scriptElm = document.createElement('script');
   scriptElm.type = 'module';

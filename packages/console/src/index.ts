@@ -11,7 +11,7 @@ const main = async () => {
   }
 
   console.log(`Spotify+ v${config.version}`);
-  const injector = new Injector(config, false);
+  const injector = new Injector(config, true);
   await injector.inject();
   console.log("Hi!");
 

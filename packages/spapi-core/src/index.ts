@@ -1,6 +1,8 @@
 import SPApi from "./SPApi";
 
 const main = async () => {
+  // TODO do it differently!
+  // An idea: document all of the properties that SPApiTemp should have in SPApiTemp and wait for them. 
   while (!(
     (globalThis as any).SPApiTemp.React &&
     (globalThis as any).SPApiTemp.ReactDOM &&
@@ -15,7 +17,8 @@ const main = async () => {
   const spapi = new SPApi(port, accessKey,
     (globalThis as any).SPApiTemp
   );
-  await spapi.makePlatform();
+  await spapi.initialize();
+  await spapi.connect();
 
   (globalThis as any).SPApi = spapi;
 }

@@ -29,15 +29,15 @@ export default class Patcher {
   }
 
   /**
-   * Unpatches all patches passed, or when a string is passed unpatches all
+   * Unpatches all patches passed, or when a string is passed unPatches all
    * patches done by that specific caller.
-   * @param {Array|string} patches - Either an array of patches to unpatch or a caller name
+   * @param {Array|string} patches - Either an array of patches to unPatch or a caller name
    */
-  static unpatchAll(patches) {
+  static unPatchAll(patches) {
     if (typeof patches === "string") patches = this.getPatchesByCaller(patches);
 
     for (const patch of patches) {
-      patch.unpatch();
+      patch.unPatch();
     }
   }
 
@@ -116,8 +116,8 @@ export default class Patcher {
   }
 
   /**
-   * Function with no arguments and no return value that may be called to revert changes made by {@link module:Patcher}, restoring (unpatching) original method.
-   * @callback module:Patcher~unpatch
+   * Function with no arguments and no return value that may be called to revert changes made by {@link module:Patcher}, restoring (unPatching) original method.
+   * @callback module:Patcher~unPatch
    */
 
   /**
@@ -136,14 +136,14 @@ export default class Patcher {
    * This method patches onto another function, allowing your code to run beforehand.
    * Using this, you are also able to modify the incoming arguments before the original method is run.
    *
-   * @param {string} caller - Name of the caller of the patch function. Using this you can undo all patches with the same name using {@link module:Patcher.unpatchAll}. Use `""` if you don't care.
+   * @param {string} caller - Name of the caller of the patch function. Using this you can undo all patches with the same name using {@link module:Patcher.unPatchAll}. Use `""` if you don't care.
    * @param {object} moduleToPatch - Object with the function to be patched. Can also patch an object's prototype.
    * @param {string} functionName - Name of the method to be patched
    * @param {module:Patcher~patchCallback} callback - Function to run before the original method
    * @param {object} options - Object used to pass additional options.
    * @param {string} [options.displayName] You can provide meaningful name for class/object provided in `what` param for logging purposes. By default, this function will try to determine name automatically.
    * @param {boolean} [options.forcePatch=true] Set to `true` to patch even if the function doesnt exist. (Adds noop function in place).
-   * @return {module:Patcher~unpatch} Function with no arguments and no return value that should be called to cancel (unpatch) this patch. You should save and run it when your plugin is stopped.
+   * @return {module:Patcher~unPatch} Function with no arguments and no return value that should be called to cancel (unPatch) this patch. You should save and run it when your plugin is stopped.
    */
   static before(caller, moduleToPatch, functionName, callback, options = {}) { return this.pushChildPatch(caller, moduleToPatch, functionName, callback, Object.assign(options, { type: "before" })); }
 
@@ -151,14 +151,14 @@ export default class Patcher {
    * This method patches onto another function, allowing your code to run after.
    * Using this, you are also able to modify the return value, using the return of your code instead.
    *
-   * @param {string} caller - Name of the caller of the patch function. Using this you can undo all patches with the same name using {@link module:Patcher.unpatchAll}. Use `""` if you don't care.
+   * @param {string} caller - Name of the caller of the patch function. Using this you can undo all patches with the same name using {@link module:Patcher.unPatchAll}. Use `""` if you don't care.
    * @param {object} moduleToPatch - Object with the function to be patched. Can also patch an object's prototype.
    * @param {string} functionName - Name of the method to be patched
    * @param {module:Patcher~patchCallback} callback - Function to run instead of the original method
    * @param {object} options - Object used to pass additional options.
    * @param {string} [options.displayName] You can provide meaningful name for class/object provided in `what` param for logging purposes. By default, this function will try to determine name automatically.
    * @param {boolean} [options.forcePatch=true] Set to `true` to patch even if the function doesnt exist. (Adds noop function in place).
-   * @return {module:Patcher~unpatch} Function with no arguments and no return value that should be called to cancel (unpatch) this patch. You should save and run it when your plugin is stopped.
+   * @return {module:Patcher~unPatch} Function with no arguments and no return value that should be called to cancel (unPatch) this patch. You should save and run it when your plugin is stopped.
    */
   static after(caller, moduleToPatch, functionName, callback, options = {}) { return this.pushChildPatch(caller, moduleToPatch, functionName, callback, Object.assign(options, { type: "after" })); }
 
@@ -166,14 +166,14 @@ export default class Patcher {
    * This method patches onto another function, allowing your code to run instead.
    * Using this, you are also able to modify the return value, using the return of your code instead.
    *
-   * @param {string} caller - Name of the caller of the patch function. Using this you can undo all patches with the same name using {@link module:Patcher.unpatchAll}. Use `""` if you don't care.
+   * @param {string} caller - Name of the caller of the patch function. Using this you can undo all patches with the same name using {@link module:Patcher.unPatchAll}. Use `""` if you don't care.
    * @param {object} moduleToPatch - Object with the function to be patched. Can also patch an object's prototype.
    * @param {string} functionName - Name of the method to be patched
    * @param {module:Patcher~patchCallback} callback - Function to run after the original method
    * @param {object} options - Object used to pass additional options.
    * @param {string} [options.displayName] You can provide meaningful name for class/object provided in `what` param for logging purposes. By default, this function will try to determine name automatically.
    * @param {boolean} [options.forcePatch=true] Set to `true` to patch even if the function doesnt exist. (Adds noop function in place).
-   * @return {module:Patcher~unpatch} Function with no arguments and no return value that should be called to cancel (unpatch) this patch. You should save and run it when your plugin is stopped.
+   * @return {module:Patcher~unPatch} Function with no arguments and no return value that should be called to cancel (unPatch) this patch. You should save and run it when your plugin is stopped.
    */
   static instead(caller, moduleToPatch, functionName, callback, options = {}) { return this.pushChildPatch(caller, moduleToPatch, functionName, callback, Object.assign(options, { type: "instead" })); }
 
@@ -182,7 +182,7 @@ export default class Patcher {
    * Using this you are able to modify the incoming arguments before the original function is run as well as the return
    * value before the original function actually returns.
    *
-   * @param {string} caller - Name of the caller of the patch function. Using this you can undo all patches with the same name using {@link module:Patcher.unpatchAll}. Use `""` if you don't care.
+   * @param {string} caller - Name of the caller of the patch function. Using this you can undo all patches with the same name using {@link module:Patcher.unPatchAll}. Use `""` if you don't care.
    * @param {object} moduleToPatch - Object with the function to be patched. Can also patch an object's prototype.
    * @param {string} functionName - Name of the method to be patched
    * @param {module:Patcher~patchCallback} callback - Function to run after the original method
@@ -190,7 +190,7 @@ export default class Patcher {
    * @param {string} [options.type=after] - Determines whether to run the function `before`, `instead`, or `after` the original.
    * @param {string} [options.displayName] You can provide meaningful name for class/object provided in `what` param for logging purposes. By default, this function will try to determine name automatically.
    * @param {boolean} [options.forcePatch=true] Set to `true` to patch even if the function doesnt exist. (Adds noop function in place).
-   * @return {module:Patcher~unpatch} Function with no arguments and no return value that should be called to cancel (unpatch) this patch. You should save and run it when your plugin is stopped.
+   * @return {module:Patcher~unPatch} Function with no arguments and no return value that should be called to cancel (unPatch) this patch. You should save and run it when your plugin is stopped.
    */
   static pushChildPatch(caller, moduleToPatch, functionName, callback, options = {}) {
     const { type = "after", forcePatch = true } = options;
@@ -210,7 +210,7 @@ export default class Patcher {
       type,
       id: patch.counter,
       callback,
-      unpatch: () => {
+      unPatch: () => {
         patch.children.splice(patch.children.findIndex(cpatch => cpatch.id === child.id && cpatch.type === type), 1);
         if (patch.children.length <= 0) {
           const patchNum = this.patches.findIndex(p => p.module == module && p.functionName == functionName);
@@ -222,7 +222,7 @@ export default class Patcher {
     };
     patch.children.push(child);
     patch.counter++;
-    return child.unpatch;
+    return child.unPatch;
   }
 
 }

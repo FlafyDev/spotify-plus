@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { v4 as uuidV4 } from 'uuid';
 import { version } from "../package.json";
-import { fileExists } from './utils';
+import fileExists from './utils/fileExists';
 
 const appDataDirectory = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share");
 
