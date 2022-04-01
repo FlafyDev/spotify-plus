@@ -1,9 +1,9 @@
-import fs from 'fs/promises';
-import StreamZip from 'node-stream-zip';
+import fs from "fs/promises";
+import StreamZip from "node-stream-zip";
 import path from "path";
 import Config from "../config";
-import fileExists from '../utils/fileExists';
-import XpuiInjector from './xpuiInjector';
+import fileExists from "../utils/fileExists";
+import XpuiInjector from "./xpuiInjector";
 
 // const flowParser = require('flow-parser')
 
@@ -13,20 +13,25 @@ class Injector {
   xpuiSpaBackup;
   private spotifyPlusVersionFilePath: string;
 
-
   constructor(public config: Config, public force: boolean) {
-    this.xpuiDir = path.join(this.config.spotifyDirectory, 'Apps/xpui');
-    this.xpuiSpa = path.join(this.config.spotifyDirectory, "Apps/xpui.spa");;
-    this.xpuiSpaBackup = path.join(this.config.spotifyDirectory, "Apps/xpui.backup.spa");
-    this.spotifyPlusVersionFilePath = path.join(this.xpuiDir, 'spotifyPlusVersion');
+    this.xpuiDir = path.join(this.config.spotifyDirectory, "Apps/xpui");
+    this.xpuiSpa = path.join(this.config.spotifyDirectory, "Apps/xpui.spa");
+    this.xpuiSpaBackup = path.join(
+      this.config.spotifyDirectory,
+      "Apps/xpui.backup.spa"
+    );
+    this.spotifyPlusVersionFilePath = path.join(
+      this.xpuiDir,
+      "spotifyPlusVersion"
+    );
   }
 
   async inject(inject: boolean = true) {
     if (inject) {
-      if (this.force || await this.needInjecting()) {
+      if (this.force || (await this.needInjecting())) {
         console.log("Extracting...");
 
-        await this.unInject()
+        await this.unInject();
 
         await this.extractXpui();
 
@@ -47,7 +52,7 @@ class Injector {
 
   async unInject() {
     if (await fileExists(this.xpuiDir)) {
-      await fs.rm(this.xpuiDir, { recursive: true, force: true })
+      await fs.rm(this.xpuiDir, { recursive: true, force: true });
     }
     if (await fileExists(this.xpuiSpaBackup)) {
       if (await fileExists(this.xpuiSpa)) {
@@ -64,8 +69,10 @@ class Injector {
     let sameInjectedInjectorVersion = false;
 
     if (await fileExists(this.xpuiDir)) {
-      if (!this.force && await fileExists(this.spotifyPlusVersionFilePath)) {
-        let injectedInjectorVersion = (await fs.readFile(this.spotifyPlusVersionFilePath)).toString();
+      if (!this.force && (await fileExists(this.spotifyPlusVersionFilePath))) {
+        let injectedInjectorVersion = (
+          await fs.readFile(this.spotifyPlusVersionFilePath)
+        ).toString();
 
         if (injectedInjectorVersion === this.config.version) {
           sameInjectedInjectorVersion = true;
@@ -73,19 +80,26 @@ class Injector {
       }
     }
 
-    return !sameInjectedInjectorVersion || !(!(await fileExists(this.xpuiSpa)) && await fileExists(this.xpuiSpaBackup));
+    return (
+      !sameInjectedInjectorVersion ||
+      !(
+        !(await fileExists(this.xpuiSpa)) &&
+        (await fileExists(this.xpuiSpaBackup))
+      )
+    );
   }
 
   async setServerInfo() {
-    await fs.writeFile(path.join(this.xpuiDir, 'serverInfo'), `${this.config.settings.port}:${this.config.settings.accessKey}`);
+    await fs.writeFile(
+      path.join(this.xpuiDir, "serverInfo"),
+      `${this.config.settings.port}:${this.config.settings.accessKey}`
+    );
   }
 
   async blockUpdates(block: boolean = true) {
     // if (block) {
     //   process.env.LOCALAPPDATA
-
     // }
-
     // throw "Can only block updates in Windows."
   }
 
@@ -102,9 +116,13 @@ class Injector {
     if (await fileExists(this.spotifyPlusVersionFilePath)) {
       return;
     }
-    const xpuiJSPath = path.join(this.xpuiDir, 'xpui.js');
-    const vXpuiJSPath = path.join(this.xpuiDir, 'vendor~xpui.js');
-    const xpuiInjector = new XpuiInjector(xpuiJSPath, vXpuiJSPath, 'globalThis.SPApiTemp');
+    const xpuiJSPath = path.join(this.xpuiDir, "xpui.js");
+    const vXpuiJSPath = path.join(this.xpuiDir, "vendor~xpui.js");
+    const xpuiInjector = new XpuiInjector(
+      xpuiJSPath,
+      vXpuiJSPath,
+      "globalThis.SPApiTemp"
+    );
 
     await xpuiInjector.injectSPInit();
     xpuiInjector.injectNamedComponents();
@@ -113,12 +131,12 @@ class Injector {
     xpuiInjector.injectSubMenu();
     xpuiInjector.injectPopup();
     xpuiInjector.injectGetShowFeedback();
+    // xpuiInjector.injectRightClickOpenContextMenu(); // Broken
     xpuiInjector.injectPlatform();
     xpuiInjector.injectReact();
     xpuiInjector.injectReactDOM();
     await xpuiInjector.applyInjections();
   }
-};
-
+}
 
 export default Injector;

@@ -1,47 +1,81 @@
-import UI from './ui';
+import SPApi from "../SPApi";
+import Menu from "./menu";
+import menuFilters, { MenuFilter } from "./menuFilters";
 
-interface MenuItemOptions {
-  divider?: "before" | "after" | "both" | "";
-  disabled?: boolean,
-  toggle?: boolean
-  icon?: any,
+enum MenuItemDivider {
+  None = "",
+  Before = "before",
+  After = "after",
+  Both = "both",
+}
+
+interface IMenuItemOptions {
+  divider?: MenuItemDivider;
+  menuFilter?: MenuFilter;
+  disabled?: boolean;
+  toggle?: boolean;
+  icon?: any;
 }
 
 class MenuItem {
-  public static registers: MenuItem[] = [];
+  public divider: MenuItemDivider;
+  public menuFilter: MenuFilter;
+  public disabled: boolean;
+  public toggle: boolean;
+  public icon: any;
+
   constructor(
+    public menu: Menu,
     public name: string | any,
     public onClick: (event: any, menuItem: MenuItem) => void,
-    public options: MenuItemOptions = {},
+    options: IMenuItemOptions = {}
   ) {
-    if (options.divider === undefined)
-      options.divider = "";
+    this.divider = options.divider || MenuItemDivider.None;
+    this.menuFilter = options.menuFilter || menuFilters.Any;
+    this.disabled = options.disabled || false;
+    this.toggle = options.toggle || false;
+    this.icon = options.icon;
   }
 
   register() {
-    MenuItem.registers.push(this);
+    this.unregister();
+    this.menu.menuItems.push(this);
   }
 
   unregister() {
-    MenuItem.registers = MenuItem.registers.filter(item => item !== this);
+    this.menu.menuItems = this.menu.menuItems.filter(
+      (menuItem) => menuItem !== this
+    );
   }
 
-  static onReactCreateElement(React: any, ui: UI, args: any) {
-    if (args[0] === ui.reactComponents.Menu) {
-      args = [...args, ...this.registers.map(menuItem => {
-        return React.createElement(ui.reactComponents.MenuItem, {
-          name: menuItem.name,
-          divider: menuItem.options.divider,
-          disabled: menuItem.options.disabled,
-          icon: menuItem.options.icon,
-          ['aria-checked']: menuItem.options.toggle,
-          onClick: (e: any) => menuItem.onClick(e, menuItem),
-        }, menuItem.name);
-      })];
-    }
-    return args;
+  createElement(SPApi: SPApi) {
+    const {
+      modules: { React },
+      ui,
+    } = SPApi;
+
+    return React.createElement(
+      "div",
+      {
+        style: { display: "contents" },
+        className: "SPApiMenuItem",
+        "data-menuFilter": this.menuFilter.toString(),
+      },
+      React.createElement(
+        ui.reactComponents.MenuItem,
+        {
+          name: this.name,
+          divider: this.divider,
+          disabled: this.disabled,
+          icon: this.icon,
+          ["aria-checked"]: this.toggle,
+          onClick: (e: any) => this.onClick(e, this),
+        },
+        this.name
+      )
+    );
   }
 }
 
-export { MenuItemOptions };
+export { IMenuItemOptions, MenuItemDivider };
 export default MenuItem;

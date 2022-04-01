@@ -1,16 +1,22 @@
-const esprima = require('esprima');
-import fs from 'fs';
-import fsPromise from 'fs/promises';
-import InsertManager from './InsertManager';
+const esprima = require("esprima");
+import { Parser } from "acorn";
+import fs from "fs";
+import fsPromise from "fs/promises";
+import InsertManager from "./InsertManager";
 
 class JSModifyManager {
   originalContent;
-  parsed;
+  parsed: any;
   private _insertManager;
 
   constructor(public filePath: string) {
-    this.originalContent = (fs.readFileSync(this.filePath)).toString();
-    this.parsed = esprima.parseScript(this.originalContent, { loc: true });
+    this.originalContent = fs.readFileSync(this.filePath).toString();
+    // this.parsed = esprima.parseScript(this.originalContent, { loc: true });
+    this.parsed = new Parser(
+      { locations: true, sourceType: "module", ecmaVersion: "latest" },
+      this.originalContent
+    ).parse();
+
     this._insertManager = new InsertManager(this.originalContent);
   }
 

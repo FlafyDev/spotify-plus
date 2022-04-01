@@ -13,7 +13,7 @@ const main = async () => {
     await new Promise(resolve => setTimeout(resolve, 50));
   }
 
-  const [port, accessKey] = (await fetch('serverInfo').then(data => data.text())).split(":");
+  const [port, accessKey] = (await fetch('serverInfo').then(data => data.text())).split(":", 2);
   const spapi = new SPApi(port, accessKey,
     (globalThis as any).SPApiTemp
   );

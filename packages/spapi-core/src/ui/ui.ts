@@ -1,7 +1,8 @@
-import MenuItem from "./menuItem";
+import Menu from "./menu";
+import TopBarButton, { ITopBarButtonOptions } from "./topBarButton";
 
 class UI {
-  MenuItem = MenuItem;
+  menu = new Menu();
 
   constructor(
     private React: any,
@@ -9,9 +10,14 @@ class UI {
     private functions: any,
     public reactComponents: any,
     public namedComponents: any
-  ) { }
+  ) {}
 
-  showFeedback(message: string, feedbackType: "NOTICE" | "ERROR" = "NOTICE", duration: number = 2500, errorKey: any) {
+  showFeedback(
+    message: string,
+    feedbackType: "NOTICE" | "ERROR" = "NOTICE",
+    duration: number = 2500,
+    errorKey: any
+  ) {
     this.functions.getShowFeedback({
       message,
       feedbackType,
@@ -20,22 +26,27 @@ class UI {
     });
   }
 
+  createTopBarButton(child: any, options?: ITopBarButtonOptions) {
+    return new TopBarButton(this.ReactDOM, child, options);
+  }
+
   createPopup(children: any) {
     let genericModalContainer = document.createElement("div");
 
-    this.ReactDOM.render(this.React.createElement(this.reactComponents.GenericModal, {
-      isOpen: true,
-      contentLabel: 'user.edit-details.title',
-      onRequestClose: (e: any) => e.target.remove(),
-    },
-      children
-    ), genericModalContainer);
+    this.ReactDOM.render(
+      this.React.createElement(
+        this.reactComponents.GenericModal,
+        {
+          isOpen: true,
+          contentLabel: "user.edit-details.title",
+          onRequestClose: (e: any) => e.target.remove(),
+        },
+        children
+      ),
+      genericModalContainer
+    );
 
     genericModalContainer.remove();
-  }
-
-  onReactCreateElement(args: any) {
-    return MenuItem.onReactCreateElement(this.React, this, args);
   }
 }
 

@@ -1,9 +1,9 @@
-import { CommunicationServer, Config, Injector } from '@spotify-plus/tools';
+import { CommunicationServer, Config, Injector } from "@spotify-plus/tools";
 
 const main = async () => {
   console.log("Verifying config folder...");
 
-  const config = new Config(String.raw`C:\Users\flafy\AppData\Roaming\Spotify`);
+  const config = new Config(String.raw`/usr/share/spotify/`);
   const configErr = await config.verify();
 
   if (configErr) {
@@ -15,9 +15,12 @@ const main = async () => {
   await injector.inject();
   console.log("Hi!");
 
-  const server = new CommunicationServer(config, 'D:\\spotify-plus\\extensions', false);
+  const server = new CommunicationServer(
+    config,
+    "/home/flafy/Conan/more/for-cloud/spotify/spotify-plus/extensions/",
+    false
+  );
   server.start();
-
-}
+};
 
 main();
